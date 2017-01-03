@@ -31,22 +31,20 @@ fn gen_soa_derive(input: &MacroInput) -> quote::Tokens {
     };
 
     let vec_fields: Vec<quote::Tokens> = fields.iter()
-        .cloned()
         .map(|f| {
-            let field_ident = f.ident.unwrap();
-            let field_ty = f.ty;
+            let field_ident = f.ident.clone().unwrap();
+            let field_ty = &f.ty;
             quote!{
                 pub #field_ident: Vec<#field_ty>
             }
         })
         .collect();
 
-    let field_idents: Vec<Ident> = fields.iter().cloned().map(|f| f.ident.unwrap()).collect();
+    let field_idents: Vec<Ident> = fields.iter().map(|f| f.ident.clone().unwrap()).collect();
 
     let push_self: Vec<quote::Tokens> = fields.iter()
-        .cloned()
         .map(|f| {
-            let field = f.ident.unwrap();
+            let field = f.ident.clone().unwrap();
             quote!{
                 self.#field.push(#field);
             }
@@ -54,9 +52,8 @@ fn gen_soa_derive(input: &MacroInput) -> quote::Tokens {
         .collect();
 
     let deconstruct_list: Vec<quote::Tokens> = fields.iter()
-        .cloned()
         .map(|f| {
-            let field = f.ident.unwrap();
+            let field = f.ident.clone().unwrap();
             quote!{
                 #field: #field
             }
